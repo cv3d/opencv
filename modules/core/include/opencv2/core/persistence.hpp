@@ -1227,6 +1227,20 @@ FileNodeIterator& operator >> (FileNodeIterator& it, std::vector<_Tp>& vec)
     return it;
 }
 
+template<typename _Tp, typename std::enable_if< std::is_enum<_Tp>::value >::type* = nullptr>
+static inline void write( FileStorage& fs, const String& name, const _Tp& val )
+{
+    write(fs, name, static_cast<int>(val));
+}
+
+template<typename _Tp, typename std::enable_if< std::is_enum<_Tp>::value >::type* = nullptr>
+static inline void read(const FileNode& node, _Tp& value, const _Tp& default_value = static_cast<_Tp>(0))
+{
+    int temp;
+    read(node, temp, static_cast<int>(default_value));
+    value = static_cast<_Tp>(temp);
+}
+
 //! @} FileNodeIterator
 
 //! @relates cv::FileNode
